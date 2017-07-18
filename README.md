@@ -20,6 +20,7 @@ to authenticate users with Instagram.
     * [`InstagramApiAuth`](#instagramapiauth)
     * [Implicit Auth](#implicit-auth)
     * [Explicit Auth](#explicit-auth)
+* [Constants](#constants)
 
 # Authentication
 ## Via Access Token
@@ -52,7 +53,8 @@ Applications with no server-side component can implement
 [implicit auth](https://www.instagram.com/developer/authentication/).
 
 To get a redirect URI:
-```
+
+```dart
 var redirectUri = auth.getImplicitRedirectUri();
 window.location.href = redirectUri.toString();
 ```
@@ -61,7 +63,8 @@ window.location.href = redirectUri.toString();
 This library also supports traditional OAuth2 authentication.
 
 To obtain a redirect URI:
-```
+
+```dart
 var redirectUri = auth.getRedirectUri();
 var redirectUri = auth.getRedirectUri(state: 'foo.bar=baz');
 res.redirect(redirectUri.toString());
