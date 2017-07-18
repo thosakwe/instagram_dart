@@ -55,8 +55,7 @@ class InstagramApiAuth {
   }
 
   /// Parses an Instagram access token response.
-  static AccessTokenResponse parseAccessTokenResponse(
-      http.Response response) {
+  static AccessTokenResponse parseAccessTokenResponse(http.Response response) {
     if (response.headers['content-type']?.contains('application/json') != true)
       throw new FormatException('The response is not formatted as JSON.');
     var untyped = JSON.decode(response.body);
@@ -84,8 +83,8 @@ class InstagramApiAuth {
   /// Creates an API from a parsed access token response.
   static InstagramApi authorize(
       AccessTokenResponse accessTokenResponse, http.BaseClient httpClient) {
-    return authorizeViaAccessToken(
-        accessTokenResponse.accessToken, httpClient);
+    return authorizeViaAccessToken(accessTokenResponse.accessToken, httpClient,
+        user: accessTokenResponse.user);
   }
 
   /// Handles an access token response, and returns an API client.
