@@ -63,9 +63,11 @@ class InstagramApiAuth {
     if (untyped is! Map)
       throw new FormatException('Expected the response to be a JSON object.');
 
-    if (!untyped.containsKey('access_token') || !untyped.containsKey('user'))
+    if (!untyped.containsKey('access_token') || !untyped.containsKey('user')) {
+      print('Hm: ${untyped}');
       throw new FormatException(
           'Expected both an "access_token" and a "user".');
+    }
 
     return new AccessTokenResponse.fromJson(new Map.from(untyped));
   }
@@ -104,11 +106,7 @@ class InstagramApiAuth {
       'code': code
     };
     var response = await httpClient.post(tokenEndpoint,
-        body: JSON.encode(data),
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json'
-        });
+        body: data, headers: {'accept': 'application/json'});
     return handleAccessTokenResponse(response, httpClient);
   }
 }

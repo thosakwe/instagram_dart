@@ -138,3 +138,44 @@ abstract class InstagramResponsePaginationMapper {
     return JSON.encoder.convert(map(object));
   }
 }
+
+// **************************************************************************
+// Generator: JsonGenerator
+// Target: class InstagramAuthException
+// **************************************************************************
+
+/// Mapper for InstagramAuthException
+abstract class InstagramAuthExceptionMapper {
+  /// Converts an instance of InstagramAuthException to Map.
+  static Map<String, dynamic> map(InstagramAuthException object) {
+    if (object == null) return null;
+    return (new _owl_json.MapBuilder(ordered: false)
+          ..put('error', object.error)
+          ..put('error_reason', object.errorReason)
+          ..put('error_description', object.errorDescription))
+        .toMap();
+  }
+
+  /// Converts a Map to an instance of InstagramAuthException.
+  static InstagramAuthException parse(Map<String, dynamic> map) {
+    if (map == null) return null;
+    final InstagramAuthException object = new InstagramAuthException();
+    object.error = map['error'];
+    object.errorReason = map['error_reason'];
+    object.errorDescription = map['error_description'];
+    return object;
+  }
+
+  /// Converts a JSON string to an instance of InstagramAuthException.
+  static InstagramAuthException fromJson(String json) {
+    if (json == null || json.isEmpty) return null;
+    final Map<String, dynamic> map = JSON.decoder.convert(json);
+    return parse(map);
+  }
+
+  /// Converts an instance of InstagramAuthException to JSON string.
+  static String toJson(InstagramAuthException object) {
+    if (object == null) return null;
+    return JSON.encoder.convert(map(object));
+  }
+}

@@ -49,3 +49,19 @@ class InstagramResponsePagination {
       InstagramResponsePaginationMapper.parse(map);
   Map<String, dynamic> toJson() => InstagramResponsePaginationMapper.map(this);
 }
+
+@JsonClass()
+class InstagramAuthException implements Exception {
+  String error;
+
+  @JsonField(key: 'error_reason')
+  String errorReason;
+
+  @JsonField(key: 'error_description')
+  String errorDescription;
+
+  InstagramAuthException({this.error, this.errorReason, this.errorDescription});
+  factory InstagramAuthException.fromJson(Map map) =>
+      InstagramAuthExceptionMapper.parse(map);
+  Map<String, dynamic> toJson() => InstagramAuthExceptionMapper.map(this);
+}
