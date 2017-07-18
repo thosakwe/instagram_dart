@@ -17,13 +17,13 @@ import 'package:owl/util/json/core.dart' as _owl_json;
 
 // **************************************************************************
 // Generator: JsonGenerator
-// Target: class AuthorizationResponse
+// Target: class AccessTokenResponse
 // **************************************************************************
 
-/// Mapper for AuthorizationResponse
-abstract class AuthorizationResponseMapper {
-  /// Converts an instance of AuthorizationResponse to Map.
-  static Map<String, dynamic> map(AuthorizationResponse object) {
+/// Mapper for AccessTokenResponse
+abstract class AccessTokenResponseMapper {
+  /// Converts an instance of AccessTokenResponse to Map.
+  static Map<String, dynamic> map(AccessTokenResponse object) {
     if (object == null) return null;
     return (new _owl_json.MapBuilder(ordered: false)
           ..put('access_token', object.accessToken)
@@ -31,24 +31,24 @@ abstract class AuthorizationResponseMapper {
         .toMap();
   }
 
-  /// Converts a Map to an instance of AuthorizationResponse.
-  static AuthorizationResponse parse(Map<String, dynamic> map) {
+  /// Converts a Map to an instance of AccessTokenResponse.
+  static AccessTokenResponse parse(Map<String, dynamic> map) {
     if (map == null) return null;
-    final AuthorizationResponse object = new AuthorizationResponse();
+    final AccessTokenResponse object = new AccessTokenResponse();
     object.accessToken = map['access_token'];
     object.user = UserMapper.parse(map['user']);
     return object;
   }
 
-  /// Converts a JSON string to an instance of AuthorizationResponse.
-  static AuthorizationResponse fromJson(String json) {
+  /// Converts a JSON string to an instance of AccessTokenResponse.
+  static AccessTokenResponse fromJson(String json) {
     if (json == null || json.isEmpty) return null;
     final Map<String, dynamic> map = JSON.decoder.convert(json);
     return parse(map);
   }
 
-  /// Converts an instance of AuthorizationResponse to JSON string.
-  static String toJson(AuthorizationResponse object) {
+  /// Converts an instance of AccessTokenResponse to JSON string.
+  static String toJson(AccessTokenResponse object) {
     if (object == null) return null;
     return JSON.encoder.convert(map(object));
   }
@@ -166,7 +166,8 @@ abstract class MediaMapper {
           ..put('likes', CommentOrLikeCountMapper.map(object.likes))
           ..put('user', UserMapper.map(object.user))
           ..put('location', LocationMapper.map(object.location))
-          ..put('images', MediaImagesMapper.map(object.images)))
+          ..put('images', MediaImagesMapper.map(object.images))
+          ..put('user_has_liked', object.userHasLiked))
         .toMap();
   }
 
@@ -191,6 +192,7 @@ abstract class MediaMapper {
     object.user = UserMapper.parse(map['user']);
     object.location = LocationMapper.parse(map['location']);
     object.images = MediaImagesMapper.parse(map['images']);
+    object.userHasLiked = map['user_has_liked'];
     return object;
   }
 
@@ -244,6 +246,45 @@ abstract class MediaCaptionMapper {
 
   /// Converts an instance of MediaCaption to JSON string.
   static String toJson(MediaCaption object) {
+    if (object == null) return null;
+    return JSON.encoder.convert(map(object));
+  }
+}
+
+// **************************************************************************
+// Generator: JsonGenerator
+// Target: class Relationship
+// **************************************************************************
+
+/// Mapper for Relationship
+abstract class RelationshipMapper {
+  /// Converts an instance of Relationship to Map.
+  static Map<String, dynamic> map(Relationship object) {
+    if (object == null) return null;
+    return (new _owl_json.MapBuilder(ordered: false)
+          ..put('outgoing_status', object.outgoingStatus)
+          ..put('incoming_status', object.incomingStatus))
+        .toMap();
+  }
+
+  /// Converts a Map to an instance of Relationship.
+  static Relationship parse(Map<String, dynamic> map) {
+    if (map == null) return null;
+    final Relationship object = new Relationship();
+    object.outgoingStatus = map['outgoing_status'];
+    object.incomingStatus = map['incoming_status'];
+    return object;
+  }
+
+  /// Converts a JSON string to an instance of Relationship.
+  static Relationship fromJson(String json) {
+    if (json == null || json.isEmpty) return null;
+    final Map<String, dynamic> map = JSON.decoder.convert(json);
+    return parse(map);
+  }
+
+  /// Converts an instance of Relationship to JSON string.
+  static String toJson(Relationship object) {
     if (object == null) return null;
     return JSON.encoder.convert(map(object));
   }

@@ -16,6 +16,7 @@ class InstagramLocationsApiImpl implements InstagramLocationsApi {
 
     if (lat != null) queryParameters['lat'] = lat.toString();
     if (lng != null) queryParameters['lng'] = lng.toString();
+    if (distance != null) queryParameters['distance'] = distance.toString();
     if (facebookPlacesId != null)
       queryParameters['facebook_places_id'] = facebookPlacesId;
 

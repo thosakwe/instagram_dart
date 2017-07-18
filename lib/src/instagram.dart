@@ -43,7 +43,7 @@ class InstagramApiAuth {
   }
 
   /// Returns a URI that users can be redirected to to authenticate via applications with no server-side component.
-  Uri getImplicitRedirectUri({String state}) {
+  Uri getImplicitRedirectUri() {
     if (redirectUri == null)
       throw new StateError(
           'You have not provided a `redirectUri` to this InstagramApiAuth instance.');
@@ -54,7 +54,8 @@ class InstagramApiAuth {
     });
   }
 
-  static AuthorizationResponse parseAuthorizationResponse(
+  /// Parses an Instagram access token response.
+  static AccessTokenResponse parseAccessTokenResponse(
       http.Response response) {
     if (response.headers['content-type']?.contains('application/json') != true)
       throw new FormatException('The response is not formatted as JSON.');
@@ -67,9 +68,12 @@ class InstagramApiAuth {
       throw new FormatException(
           'Expected both an "access_token" and a "user".');
 
-    return new AuthorizationResponse.fromJson(new Map.from(untyped));
+    return new AccessTokenResponse.fromJson(new Map.from(untyped));
   }
 
+  /// Creates an API client from an access token.
+  ///
+  /// You can optionally pass a [User], if you already have a reference to one.
   static InstagramApi authorizeViaAccessToken(
       String accessToken, http.BaseClient httpClient,
       {User user}) {
@@ -77,17 +81,20 @@ class InstagramApiAuth {
         accessToken, user, new _RequestorImpl(accessToken, httpClient));
   }
 
+  /// Creates an API from a parsed access token response.
   static InstagramApi authorize(
-      AuthorizationResponse authorizationResponse, http.BaseClient httpClient) {
+      AccessTokenResponse accessTokenResponse, http.BaseClient httpClient) {
     return authorizeViaAccessToken(
-        authorizationResponse.accessToken, httpClient);
+        accessTokenResponse.accessToken, httpClient);
   }
 
-  static InstagramApi handleAuthorizationResponse(
+  /// Handles an access token response, and returns an API client.
+  static InstagramApi handleAccessTokenResponse(
       http.Response response, http.BaseClient httpClient) {
-    return authorize(parseAuthorizationResponse(response), httpClient);
+    return authorize(parseAccessTokenResponse(response), httpClient);
   }
 
+  /// Upgrades an OAuth2 authorization code into an access token, and returns an API client.
   Future<InstagramApi> handleAuthorizationCode(
       String code, http.BaseClient httpClient) async {
     Map<String, String> data = {
@@ -103,7 +110,7 @@ class InstagramApiAuth {
           'accept': 'application/json',
           'content-type': 'application/json'
         });
-    return handleAuthorizationResponse(response, httpClient);
+    return handleAccessTokenResponse(response, httpClient);
   }
 }
 

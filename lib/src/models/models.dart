@@ -2,16 +2,16 @@ import 'package:owl/annotation/json.dart';
 import 'models.g.dart';
 
 @JsonClass()
-class AuthorizationResponse {
+class AccessTokenResponse {
   @JsonField(key: 'access_token')
   String accessToken;
 
   User user;
 
-  AuthorizationResponse({this.accessToken, this.user});
-  factory AuthorizationResponse.fromJson(Map map) =>
-      AuthorizationResponseMapper.parse(map);
-  Map<String, dynamic> toJson() => AuthorizationResponseMapper.map(this);
+  AccessTokenResponse({this.accessToken, this.user});
+  factory AccessTokenResponse.fromJson(Map map) =>
+      AccessTokenResponseMapper.parse(map);
+  Map<String, dynamic> toJson() => AccessTokenResponseMapper.map(this);
 }
 
 @JsonClass()
@@ -68,6 +68,9 @@ class Media {
 
   MediaImages images;
 
+  @JsonField(key: 'user_has_liked')
+  bool userHasLiked;
+
   @Transient()
   DateTime createdTime;
 
@@ -83,6 +86,7 @@ class Media {
       this.user,
       this.location,
       this.images,
+      this.userHasLiked,
       this.createdTime});
   factory Media.fromJson(Map map) {
     var m = MediaMapper.parse(map);
@@ -107,7 +111,7 @@ class MediaCaption {
   DateTime createdTime;
 
   MediaCaption({this.id, this.text, this.from});
-  
+
   factory MediaCaption.fromJson(Map map) {
     var m = MediaCaptionMapper.parse(map);
     if (map['created_time'] is String)
@@ -120,6 +124,61 @@ class MediaCaption {
     return MediaCaptionMapper.map(this)
       ..['created_time'] = createdTime?.millisecondsSinceEpoch?.toString();
   }
+}
+
+@JsonClass()
+class Relationship {
+  @JsonField(key: 'outgoing_status')
+  String outgoingStatus;
+
+  @JsonField(key: 'incoming_status')
+  String incomingStatus;
+
+  Relationship({this.incomingStatus, this.outgoingStatus});
+  factory Relationship.fromJson(Map map) => RelationshipMapper.parse(map);
+  Map<String, dynamic> toJson() => RelationshipMapper.map(this);
+}
+
+/// The various types of incoming relationship status on Instagram.
+abstract class IncomingStatus {
+  /// This user has no relationship to you.
+  static const String none = 'none';
+
+  /// This user follows you.
+  static const String followedBy = 'followed_by';
+
+  /// This user is requesting to follow you.
+  static const String requestedBy = 'requested_by';
+
+  /// You have blocked this user.
+  static const String blockedByYou = 'blocked_by_you';
+}
+
+/// The various types of incoming relationship status on Instagram.
+abstract class OutgoingStatus {
+  /// You have no relationship to this user.
+  static const String none = 'none';
+
+  /// You follow this user.
+  static const String follows = 'follows';
+
+  /// You have requested to follow this user.
+  static const String requested = 'requested';
+}
+
+/// The various actions that can be performed on a relationship on Instagram.
+abstract class RelationshipAction {
+  /// Follow a user.
+  static const String follow = 'follow';
+
+  /// Unfollow a user.
+  static const String unfollow = 'unfollow';
+
+  /// Approve a follow request.
+  static const String approve = 'approve';
+
+  /// Ignore a follow request.
+  static const String ignore = 'ignore';
 }
 
 @JsonClass()

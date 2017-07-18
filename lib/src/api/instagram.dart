@@ -2,6 +2,8 @@ import '../models/models.dart';
 import 'comment.dart';
 import 'like.dart';
 import 'location.dart';
+import 'media.dart';
+import 'relationships.dart';
 import 'tag.dart';
 import 'user.dart';
 
@@ -21,6 +23,12 @@ abstract class InstagramApi {
 
   /// An abstraction to extract likes information from Instagram.
   InstagramLikesApi get likes;
+
+  /// An abstraction to extract media information from Instagram.
+  InstagramMediaApi get media;
+
+  /// An abstraction to extract relationship information from Instagram.
+  InstagramRelationshipsApi get relationships;
 
   /// An abstraction to extract tag information from Instagram.
   InstagramTagsApi get tags;
