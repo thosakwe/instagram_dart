@@ -147,6 +147,7 @@ class _RequestorImpl extends Requestor {
     Map<String, String> q =
         method == 'POST' ? {} : {'access_token': accessToken}
           ..addAll(queryParameters ?? {});
+    if (q.isEmpty) return _root.replace(path: path);
     return _root.replace(path: path, queryParameters: q);
   }
 

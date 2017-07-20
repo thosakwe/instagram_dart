@@ -36,14 +36,14 @@ class _InstagramCommentsApiMediaImpl implements InstagramCommentsApiMedia {
   Future<bool> createComment(String text) {
     return requestor
         .request(_root, method: 'POST', body: {'text': text}).then((r) {
-      return r.data == null;
+      return true;
     });
   }
 
   @override
   Future<bool> deleteComment(String commentId) {
     return requestor.request('$_root/$commentId', method: 'DELETE').then((r) {
-      return r.data == null;
+      return true;
     });
   }
 }

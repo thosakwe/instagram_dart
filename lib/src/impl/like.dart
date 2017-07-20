@@ -35,14 +35,14 @@ class _InstagramLikesApiMediaImpl implements InstagramLikesApiMedia {
   @override
   Future<bool> like() {
     return requestor.request(_root, method: 'POST').then((r) {
-      return r.data == null;
+      return true;
     });
   }
 
   @override
   Future<bool> unlike() {
     return requestor.request(_root, method: 'DELETE').then((r) {
-      return r.data == null;
+      return true;
     });
   }
 }

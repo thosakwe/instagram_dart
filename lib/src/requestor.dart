@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:http/src/base_client.dart' as http;
 import 'package:http/src/request.dart' as http;
 import 'package:http/src/response.dart' as http;
@@ -16,8 +15,8 @@ abstract class Requestor {
     rq.headers['accept'] = 'application/json';
 
     if (body?.isNotEmpty == true) {
-      rq.headers['content-type'] = 'application/json';
-      rq.body = JSON.encode(buildBody(body));
+      // rq.headers['content-type'] = 'application/json';
+      rq.bodyFields = buildBody(body);
     }
 
     return send(rq);

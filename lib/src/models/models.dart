@@ -92,13 +92,15 @@ class Media {
     var m = MediaMapper.parse(map);
     if (map['created_time'] is String)
       m.createdTime = new DateTime.fromMillisecondsSinceEpoch(
-          int.parse(map['created_time']));
+          int.parse(map['created_time']) * 1000);
     return m;
   }
 
   Map<String, dynamic> toJson() {
     return MediaMapper.map(this)
-      ..['created_time'] = createdTime?.millisecondsSinceEpoch?.toString();
+      ..['created_time'] = createdTime == null
+          ? null
+          : (createdTime.millisecondsSinceEpoch / 1000).toString();
   }
 }
 
@@ -116,13 +118,15 @@ class MediaCaption {
     var m = MediaCaptionMapper.parse(map);
     if (map['created_time'] is String)
       m.createdTime = new DateTime.fromMillisecondsSinceEpoch(
-          int.parse(map['created_time']));
+          int.parse(map['created_time']) * 1000);
     return m;
   }
 
   Map<String, dynamic> toJson() {
     return MediaCaptionMapper.map(this)
-      ..['created_time'] = createdTime?.millisecondsSinceEpoch?.toString();
+      ..['created_time'] = createdTime == null
+          ? null
+          : (createdTime.millisecondsSinceEpoch / 1000).toString();
   }
 }
 
@@ -256,13 +260,15 @@ class Comment {
     var c = CommentMapper.parse(map);
     if (map['created_time'] is String)
       c.createdTime = new DateTime.fromMillisecondsSinceEpoch(
-          int.parse(map['created_time']));
+          int.parse(map['created_time']) * 1000);
     return c;
   }
 
   Map<String, dynamic> toJson() {
     return CommentMapper.map(this)
-      ..['created_time'] = createdTime?.millisecondsSinceEpoch?.toString();
+      ..['created_time'] = createdTime == null
+          ? null
+          : (createdTime.millisecondsSinceEpoch / 1000).toString();
   }
 }
 
