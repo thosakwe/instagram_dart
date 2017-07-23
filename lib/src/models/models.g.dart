@@ -158,6 +158,7 @@ abstract class MediaMapper {
           ..put('id', object.id)
           ..put('type', object.type)
           ..put('filter', object.filter)
+          ..put('link', object.link)
           ..put('caption', MediaCaptionMapper.map(object.caption))
           ..put('users_in_photo',
               object.usersInPhoto?.map(UserInPhotoMapper.map)?.toList())
@@ -167,7 +168,10 @@ abstract class MediaMapper {
           ..put('user', UserMapper.map(object.user))
           ..put('location', LocationMapper.map(object.location))
           ..put('images', MediaImagesMapper.map(object.images))
-          ..put('user_has_liked', object.userHasLiked))
+          ..put('videos', MediaImagesMapper.map(object.videos))
+          ..put('user_has_liked', object.userHasLiked)
+          ..put('carousel_media',
+              object.carouselMedia?.map(MediaMapper.map)?.toList()))
         .toMap();
   }
 
@@ -178,6 +182,7 @@ abstract class MediaMapper {
     object.id = map['id'];
     object.type = map['type'];
     object.filter = map['filter'];
+    object.link = map['link'];
     object.caption = MediaCaptionMapper.parse(map['caption']);
 
     // ignore: avoid_as
@@ -192,7 +197,13 @@ abstract class MediaMapper {
     object.user = UserMapper.parse(map['user']);
     object.location = LocationMapper.parse(map['location']);
     object.images = MediaImagesMapper.parse(map['images']);
+    object.videos = MediaImagesMapper.parse(map['videos']);
     object.userHasLiked = map['user_has_liked'];
+
+    // ignore: avoid_as
+    object.carouselMedia = (map['carousel_media'] as List<dynamic>)
+        ?.map(MediaMapper.parse)
+        ?.toList();
     return object;
   }
 
@@ -607,6 +618,49 @@ abstract class LocationMapper {
 
   /// Converts an instance of Location to JSON string.
   static String toJson(Location object) {
+    if (object == null) return null;
+    return JSON.encoder.convert(map(object));
+  }
+}
+
+// **************************************************************************
+// Generator: JsonGenerator
+// Target: class Subscription
+// **************************************************************************
+
+/// Mapper for Subscription
+abstract class SubscriptionMapper {
+  /// Converts an instance of Subscription to Map.
+  static Map<String, dynamic> map(Subscription object) {
+    if (object == null) return null;
+    return (new _owl_json.MapBuilder(ordered: false)
+          ..put('id', object.id)
+          ..put('type', object.type)
+          ..put('aspect', object.aspect)
+          ..put('callback_url', object.callbackUrl))
+        .toMap();
+  }
+
+  /// Converts a Map to an instance of Subscription.
+  static Subscription parse(Map<String, dynamic> map) {
+    if (map == null) return null;
+    final Subscription object = new Subscription();
+    object.id = map['id'];
+    object.type = map['type'];
+    object.aspect = map['aspect'];
+    object.callbackUrl = map['callback_url'];
+    return object;
+  }
+
+  /// Converts a JSON string to an instance of Subscription.
+  static Subscription fromJson(String json) {
+    if (json == null || json.isEmpty) return null;
+    final Map<String, dynamic> map = JSON.decoder.convert(json);
+    return parse(map);
+  }
+
+  /// Converts an instance of Subscription to JSON string.
+  static String toJson(Subscription object) {
     if (object == null) return null;
     return JSON.encoder.convert(map(object));
   }

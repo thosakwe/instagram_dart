@@ -50,7 +50,7 @@ class UserCounts {
 
 @JsonClass()
 class Media {
-  String id, type, filter;
+  String id, type, filter, link;
 
   MediaCaption caption;
 
@@ -66,10 +66,13 @@ class Media {
 
   Location location;
 
-  MediaImages images;
+  MediaImages images, videos;
 
   @JsonField(key: 'user_has_liked')
   bool userHasLiked;
+
+  @JsonField(key: 'carousel_media')
+  List<Media> carouselMedia;
 
   @Transient()
   DateTime createdTime;
@@ -78,6 +81,7 @@ class Media {
       {this.id,
       this.type,
       this.filter,
+      this.link,
       this.caption,
       this.usersInPhoto: const [],
       this.tags: const [],
@@ -86,7 +90,9 @@ class Media {
       this.user,
       this.location,
       this.images,
+      this.videos,
       this.userHasLiked,
+      this.carouselMedia,
       this.createdTime});
   factory Media.fromJson(Map map) {
     var m = MediaMapper.parse(map);
@@ -102,6 +108,18 @@ class Media {
           ? null
           : (createdTime.millisecondsSinceEpoch / 1000).toString();
   }
+}
+
+/// The various types of media on Instagram.
+abstract class MediaType {
+  /// An image.
+  static const String image = 'image';
+
+  /// A video.
+  static const String video = 'video';
+
+  /// A carousel.
+  static const String carousel = 'carousel';
 }
 
 @JsonClass()
@@ -219,15 +237,6 @@ class CommentOrLikeCount {
   Map<String, dynamic> toJson() => CommentOrLikeCountMapper.map(this);
 }
 
-/// Represents the various types of media in Instagram.
-abstract class MediaType {
-  /// An image on Instagram.
-  static const String image = 'image';
-
-  /// An video on Instagram.
-  static const String video = 'video';
-}
-
 @JsonClass()
 class UserInPhoto {
   User user;
@@ -293,4 +302,27 @@ class Location {
   Location({this.id, this.name, this.latitude, this.longitude});
   factory Location.fromJson(Map map) => LocationMapper.parse(map);
   Map<String, dynamic> toJson() => LocationMapper.map(this);
+}
+
+@JsonClass()
+class Subscription {
+  String id, type, aspect;
+
+  @JsonField(key: 'callback_url')
+  String callbackUrl;
+
+  Subscription({this.id, this.type, this.aspect, this.callbackUrl});
+  factory Subscription.fromJson(Map map) => SubscriptionMapper.parse(map);
+  Map<String, dynamic> toJson() => SubscriptionMapper.map(this);
+}
+
+/// The various objects for Instagram subscriptions.
+abstract class SubscriptionObject {
+  static const String all = 'all';
+  static const String user = 'user';
+}
+
+/// The various aspects for Instagram subscriptions.
+abstract class SubscriptionAspect {
+  static const String media = 'media';
 }

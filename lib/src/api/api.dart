@@ -4,5 +4,6 @@ export 'like.dart';
 export 'location.dart';
 export 'media.dart';
 export 'relationships.dart';
+export 'subscription.dart';
 export 'tag.dart';
 export 'user.dart';

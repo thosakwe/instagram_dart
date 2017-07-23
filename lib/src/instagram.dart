@@ -14,7 +14,6 @@ import 'scopes.dart';
 
 /// Manages authentication against the Instagram API.
 class InstagramApiAuth {
-  oauth2.AuthorizationCodeGrant _grant;
   final String clientId, clientSecret;
   final Uri redirectUri;
   final List<InstagramApiScope> scopes = [];
@@ -25,10 +24,9 @@ class InstagramApiAuth {
   }
 
   /// Creates or returns an OAuth2 grant that will be used to authenticate against the API.
-  oauth2.AuthorizationCodeGrant get grant =>
-      _grant ??= new oauth2.AuthorizationCodeGrant(
-          clientId, authorizationEndpoint, tokenEndpoint,
-          secret: clientSecret);
+  oauth2.AuthorizationCodeGrant get grant => new oauth2.AuthorizationCodeGrant(
+      clientId, authorizationEndpoint, tokenEndpoint,
+      secret: clientSecret);
 
   /// Returns a redirect URI that users can use to authenticate with the current application.
   ///
@@ -108,6 +106,89 @@ class InstagramApiAuth {
     var response = await httpClient.post(tokenEndpoint,
         body: data, headers: {'accept': 'application/json'});
     return handleAccessTokenResponse(response, httpClient);
+  }
+
+  /// Creates a [SubscriptionManager] with your [clientId] and [clientSecret].
+  SubscriptionManager createSubscriptionManager(http.BaseClient client) {
+    return new _SubscriptionManagerImpl(clientId, clientSecret, client);
+  }
+}
+
+class _SubscriptionManagerImpl implements SubscriptionManager {
+  final String clientId, clientSecret;
+  final http.BaseClient client;
+
+  _SubscriptionManagerImpl(this.clientId, this.clientSecret, this.client);
+
+  Future<InstagramResponse> send(String method,
+      {Map<String, String> body, Map<String, String> queryParameters}) {
+    var uri = _RequestorImpl._root.replace(path: '/v1/subscriptions');
+
+    var q = {'client_id': clientId, 'client_secret': clientSecret}
+      ..addAll(queryParameters ?? {});
+    uri = uri.replace(queryParameters: q);
+
+    var request = new http.Request(method, uri);
+    request.headers['accept'] = 'application/json';
+
+    if (body?.isNotEmpty == true) {
+      request.bodyFields = {
+        'client_id': clientId,
+        'client_secret': clientSecret
+      }..addAll(body);
+    }
+
+    return client
+        .send(request)
+        .then<http.Response>(http.Response.fromStream)
+        .then((response) {
+      if (response.headers['content-type']?.contains('application/json') !=
+          true)
+        throw new FormatException(
+            'The response is not formatted as JSON: "${response.body}"');
+      var untyped = JSON.decode(response.body);
+
+      if (untyped is! Map)
+        throw new FormatException('Expected the response to be a JSON object.');
+
+      var r = new InstagramResponse.fromJson(untyped);
+
+      if (r.meta.code != 200) throw r.meta;
+
+      return r;
+    });
+  }
+
+  @override
+  Future<bool> deleteAll() => deleteByObject(SubscriptionObject.all);
+
+  @override
+  Future<bool> deleteByObject(String object) {
+    return send('DELETE', queryParameters: {'object': object})
+        .then<bool>((_) => true);
+  }
+
+  @override
+  Future<bool> delete(String subscriptionId) {
+    return send('DELETE', queryParameters: {'id': subscriptionId})
+        .then<bool>((_) => true);
+  }
+
+  @override
+  Future<Subscription> create(
+      String object, String aspect, String verifyToken, String callbackUrl) {
+    return send('POST', body: {
+      'object': object,
+      'aspect': aspect,
+      'verify_token': verifyToken,
+      'callback_url': callbackUrl
+    }).then<Subscription>((r) => new Subscription.fromJson(r.data));
+  }
+
+  @override
+  Future<List<Subscription>> fetchAll() {
+    return send('GET').then<List<Subscription>>(
+        (r) => r.data.map((m) => new Subscription.fromJson(m)).toList());
   }
 }
 

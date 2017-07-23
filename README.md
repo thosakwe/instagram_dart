@@ -86,6 +86,15 @@ app.get('/auth/instagram/callback', (RequestContext req, InstagramApiAuth instaA
 });
 ```
 
+You can also manage
+[subscriptions](https://www.instagram.com/developer/subscriptions):
+
+```dart
+main() {
+  var subscriptions = instaAuth.createSubscriptionManager(new http.Client());
+}
+```
+
 # Endpoints
 The `InstagramClient` contains several getters that correspond to endpoints. Each is an abstraction over
 a specific Instagram API.
@@ -105,3 +114,6 @@ This API includes several classes containing helpful constants:
 * `IncomingStatus`
 * `OutgoingStatus`
 * `RelationshipAction`
+* `MediaType`
+* `SubscriptionObject`
+* `SubscriptionAspect`
