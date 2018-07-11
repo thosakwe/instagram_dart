@@ -1,6 +1,8 @@
 # instagram
 [![Pub](https://img.shields.io/pub/v/instagram.svg)](https://pub.dartlang.org/packages/instagram)
 
+### NOTE: The old Instagram API is now deprecated; this package will now focus on the Instagram Graph API.
+
 Dart Instagram client library. This library includes support for authentication,
 as well as all of the Instagram API v1 endpoints.
 
