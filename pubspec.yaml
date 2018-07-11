@@ -4,7 +4,7 @@ description: Dart Instagram client library.
 author: Tobe O <thosakwe@gmail.com>
 homepage: https://github.com/thosakwe/instagram_dart
 environment:
-  sdk: ">=1.19.0"
+  sdk: ">=1.19.0 <3.0.0"
 dependencies:
   oauth2: ^1.0.0
   owl: ^0.2.1
