@@ -48,7 +48,8 @@ class InstagramApiAuth {
     return authorizationEndpoint.replace(queryParameters: {
       'client_id': clientId,
       'redirect_uri': redirectUri.toString(),
-      'response_type': 'token'
+      'response_type': 'token',
+      'scope': scopes.map((s) => s.scope).join(' '),//_delimiter shouls be from AuthorizationCodeGrant
     });
   }
 
