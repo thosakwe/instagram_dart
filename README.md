@@ -1,3 +1,6 @@
+# ARCHIVED
+See the reasons here: https://github.com/thosakwe/instagram_dart/issues/8
+
 # instagram
 [![Pub](https://img.shields.io/pub/v/instagram.svg)](https://pub.dartlang.org/packages/instagram)
 
